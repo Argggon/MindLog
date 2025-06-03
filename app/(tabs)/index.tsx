@@ -1,75 +1,137 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import LogCard from '@/components/LogCard';
+import NewLogButton from '@/components/NewLogButton';
+import { mockLogs } from '@/data/mockLogs';
+import { Log } from '@/types/types';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useRef, useState } from 'react';
+import {
+    Animated,
+    FlatList,
+    ListRenderItem,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+const LogScreen = () => {
+  const [logs, setLogs] = useState<Log[]>(mockLogs);
+  const [buttonVisible, setButtonVisible] = useState(true);
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const flatListRef = useRef<FlatList>(null);
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  // 添加新日志
+  const addLog = (newLog: Log) => {
+    setLogs(prevLogs => [...prevLogs, newLog]);
+    
+    // 滚动到底部
+    setTimeout(() => {
+      if (flatListRef.current) {
+        flatListRef.current.scrollToEnd({ animated: true });
+      }
+    }, 100);
+  };
+
+  // 处理滚动事件
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    {
+      useNativeDriver: false,
+      listener: (event: any) => {
+        const currentOffset = event.nativeEvent.contentOffset.y;
+        const scrollDirection = currentOffset > 0 && currentOffset > (prevOffset || 0);
+        setButtonVisible(!scrollDirection);
+        prevOffset = currentOffset;
+      }
+    }
   );
-}
+  
+  let prevOffset = 0;
+
+  // 获取当前日期
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+    const day = today.getDate();
+    const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    const weekday = weekdays[today.getDay()];
+    
+    return `${year}年${month}月${day}日 ${weekday}`;
+  };
+
+  // 按钮动画
+  const buttonTranslateY = scrollY.interpolate({
+    inputRange: [0, 50],
+    outputRange: [0, 100],
+    extrapolate: 'clamp',
+  });
+
+  const renderItem: ListRenderItem<Log> = ({ item }) => <LogCard log={item} />;
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.date}>{getCurrentDate()}</Text>
+        <TouchableOpacity style={styles.filterButton}>
+          <Ionicons name="filter" size={20} color="#6366F1" />
+        </TouchableOpacity>
+      </View>
+      
+      <FlatList
+        ref={flatListRef}
+        data={logs}
+        keyExtractor={item => item.id}
+        renderItem={renderItem}
+        contentContainerStyle={styles.listContent}
+        showsVerticalScrollIndicator={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+      />
+      
+      <Animated.View 
+        style={[
+          styles.buttonWrapper,
+          { transform: [{ translateY: buttonTranslateY }] }
+        ]}
+      >
+        <NewLogButton onAddLog={addLog} />
+      </Animated.View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    flex: 1,
+    backgroundColor: '#F8FAFC',
+    paddingHorizontal: 16,
+    paddingTop: 16,
+  },
+  header: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 8,
+    marginBottom: 16,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  date: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#1E293B',
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  filterButton: {
+    padding: 8,
+  },
+  listContent: {
+    paddingBottom: 100,
+  },
+  buttonWrapper: {
     position: 'absolute',
+    bottom: 24,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
   },
 });
+
+export default LogScreen;
