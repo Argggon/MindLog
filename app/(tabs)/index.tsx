@@ -1,17 +1,18 @@
 import LogCard from '@/components/LogCard';
 import NewLogButton from '@/components/NewLogButton';
+import PageLayout from '@/components/PageLayout';
 import { mockLogs } from '@/data/mockLogs';
 import { Log } from '@/types/types';
+import { useBottomMargin } from '@/utils/safeArea';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useRef, useState } from 'react';
 import {
-    Animated,
-    FlatList,
-    ListRenderItem,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  Animated,
+  FlatList,
+  ListRenderItem,
+  StyleSheet,
+  Text,
+  TouchableOpacity
 } from 'react-native';
 
 const LogScreen = () => {
@@ -19,6 +20,7 @@ const LogScreen = () => {
   const [buttonVisible, setButtonVisible] = useState(true);
   const scrollY = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef<FlatList>(null);
+  const bottomMargin = useBottomMargin();
 
   // 添加新日志
   const addLog = (newLog: Log) => {
@@ -49,16 +51,35 @@ const LogScreen = () => {
   let prevOffset = 0;
 
   // 获取当前日期
-  const getCurrentDate = () => {
+const getCurrentDate = () => {
     const today = new Date();
     const year = today.getFullYear();
-    const month = today.getMonth() + 1;
+    const month = today.getMonth() + 1; // 月份从0开始，需要加1
     const day = today.getDate();
-    const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const weekday = weekdays[today.getDay()];
-    
-    return `${year}年${month}月${day}日 ${weekday}`;
-  };
+
+    // 定义月份名称
+    const monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    const monthName = monthNames[month - 1];
+
+    // 定义序数词
+    const getOrdinal = (n: number) => {
+        if (n > 3 && n < 21) return 'th';
+        switch (n % 10) {
+            case 1: return 'st';
+            case 2: return 'nd';
+            case 3: return 'rd';
+            default: return 'th';
+        }
+    };
+    const dayWithOrdinal = `${day}${getOrdinal(day)}`;
+
+    return `${dayWithOrdinal} ${monthName}, ${year}, ${weekday}.`;
+};
 
   // 按钮动画
   const buttonTranslateY = scrollY.interpolate({
@@ -70,14 +91,49 @@ const LogScreen = () => {
   const renderItem: ListRenderItem<Log> = ({ item }) => <LogCard log={item} />;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.date}>{getCurrentDate()}</Text>
-        <TouchableOpacity style={styles.filterButton}>
+    // <View style={styles.container}>
+    //   <View style={styles.header}>
+    //     <Text style={styles.date}>{getCurrentDate()}</Text>
+    //     <TouchableOpacity style={styles.filterButton}>
+    //       <Ionicons name="filter" size={20} color="#6366F1" />
+    //     </TouchableOpacity>
+    //   </View>
+      
+    //   <FlatList
+    //     ref={flatListRef}
+    //     data={logs}
+    //     keyExtractor={item => item.id}
+    //     renderItem={renderItem}
+    //     contentContainerStyle={styles.listContent}
+    //     showsVerticalScrollIndicator={false}
+    //     onScroll={handleScroll}
+    //     scrollEventThrottle={16}
+    //   />
+      
+    //   <Animated.View 
+    //     style={[
+    //       styles.buttonWrapper,
+    //       {
+    //         transform: [{ translateY: buttonTranslateY }],
+    //         marginBottom: bottomMargin
+    //       }
+    //     ]}
+    //   >
+    //     <NewLogButton onAddLog={addLog} />
+    //   </Animated.View>
+    // </View>
+    <PageLayout 
+      title="Today's Logs" 
+      headerRight={
+        <TouchableOpacity>
           <Ionicons name="filter" size={20} color="#6366F1" />
         </TouchableOpacity>
-      </View>
+      }
+    >
+      {/* 日期显示 */}
+      <Text style={styles.date}>{getCurrentDate()}</Text>
       
+      {/* 日志列表 */}
       <FlatList
         ref={flatListRef}
         data={logs}
@@ -89,6 +145,7 @@ const LogScreen = () => {
         scrollEventThrottle={16}
       />
       
+      {/* 新建日志按钮 */}
       <Animated.View 
         style={[
           styles.buttonWrapper,
@@ -97,7 +154,7 @@ const LogScreen = () => {
       >
         <NewLogButton onAddLog={addLog} />
       </Animated.View>
-    </View>
+    </PageLayout>
   );
 };
 

@@ -1,20 +1,27 @@
+import { useTabBarHeight } from '@/utils/safeArea';
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import React from 'react';
 
 export default function TabLayout() {
+  const tabBarHeight = useTabBarHeight();
+
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: '#6366F1',
         tabBarInactiveTintColor: 'gray',
         tabBarStyle: {
-          backgroundColor: '#F8FAFC',
+          backgroundColor: 'transparent',
+          elevation: 0,
+          shadowColor: 'transparent',
           borderTopWidth: 0,
-          height: 60,
+          height: tabBarHeight,
           paddingBottom: 10,
           paddingTop: 10,
         },
+        tabBarActiveBackgroundColor: 'transparent',
+        tabBarInactiveBackgroundColor: 'transparent',
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '500',
@@ -25,7 +32,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: '日志',
+          title: 'Log',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="journal-outline" size={size} color={color} />
           ),
@@ -34,7 +41,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="calendar"
         options={{
-          title: '日历',
+          title: 'Calendar',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar-outline" size={size} color={color} />
           ),
@@ -43,7 +50,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="dictionary"
         options={{
-          title: '词典',
+          title: 'Dictionary',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="book-outline" size={size} color={color} />
           ),
@@ -52,7 +59,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: '我的',
+          title: 'Profile',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" size={size} color={color} />
           ),
