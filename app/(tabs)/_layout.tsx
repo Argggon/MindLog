@@ -22,6 +22,7 @@ export default function TabLayout() {
         },
         tabBarActiveBackgroundColor: 'transparent',
         tabBarInactiveBackgroundColor: 'transparent',
+        // tabBarPressColor: 'transparent',
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '500',

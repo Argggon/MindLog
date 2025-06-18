@@ -4,13 +4,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    Animated,
-    Keyboard,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  Animated,
+  Keyboard,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 interface NewLogButtonProps {
@@ -289,15 +289,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 24,
     alignSelf: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderRadius: 28,
     flexDirection: 'row',
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
     elevation: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 10,
-    overflow: 'hidden',
   },
   halfButton: {
     flex: 1,
@@ -305,19 +307,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textButton: {
-    backgroundColor: '#818CF8',
+    backgroundColor: 'rgba(99, 102, 241, 0.7)',
   },
   voiceButton: {
-    backgroundColor: '#6366F1',
+    backgroundColor: 'rgba(129, 140, 248, 0.7)',
   },
   innerButton: {
     alignItems: 'center',
     justifyContent: 'center',
+    paddingVertical: 12,
   },
   buttonText: {
     color: 'white',
     marginTop: 4,
     fontSize: 12,
+    fontWeight: '500',
   },
   inputContainer: {
     position: 'absolute',

@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ImageBackground, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface PageLayoutProps {
@@ -10,6 +10,7 @@ interface PageLayoutProps {
 
 const PageLayout: React.FC<PageLayoutProps> = ({ title, children, headerRight }) => {
   const insets = useSafeAreaInsets();
+  const backgroundImage = require('@/assets/images/蓝色海洋.jpeg');
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -18,16 +19,24 @@ const PageLayout: React.FC<PageLayoutProps> = ({ title, children, headerRight })
         <Text style={styles.title}>{title}</Text>
         {headerRight && <View style={styles.headerRight}>{headerRight}</View>}
       </View>
-      
-      {/* 页面内容 */}
-      <View style={styles.content}>
-        {children}
-      </View>
+      <ImageBackground
+        source={backgroundImage}
+        style={styles.background}
+        resizeMode="cover"
+      >
+        {/* 页面内容 */}
+        <View style={styles.content}>
+            {children}
+        </View>
+      </ImageBackground>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#F8FAFC',
@@ -54,7 +63,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
   },
 });
 
