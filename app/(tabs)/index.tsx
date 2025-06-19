@@ -4,7 +4,6 @@ import PageLayout from '@/components/PageLayout';
 import { mockLogs } from '@/data/mockLogs';
 import { Log } from '@/types/types';
 import { useBottomMargin } from '@/utils/safeArea';
-import { Ionicons } from '@expo/vector-icons';
 import React, { useRef, useState } from 'react';
 import {
   Animated,
@@ -12,7 +11,8 @@ import {
   FlatList,
   ListRenderItem,
   StyleSheet,
-  TouchableOpacity
+  Text,
+  View
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -101,11 +101,11 @@ const getCurrentDate = () => {
   return (
     <PageLayout 
       title="Today's Logs" 
-      headerRight={
-        <TouchableOpacity>
-          <Ionicons name="filter" size={20} color="#000000" />
-        </TouchableOpacity>
-      }
+      // headerRight={
+      //   <TouchableOpacity>
+      //     <Ionicons name="filter" size={20} color="#000000" />
+      //   </TouchableOpacity>
+      // }
     >
       {/* <View style={styles.container}>
 
@@ -128,6 +128,10 @@ const getCurrentDate = () => {
         />
       </View> */}
 
+      <View style={styles.capsule}>
+        <Text style={styles.dateText}>{getCurrentDate()}</Text>
+      </View>
+      
       <FixedContainerWithScroll/>
 
       {/* 主内容卡片 - 带模糊效果 */}
@@ -294,7 +298,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(99, 102, 241, 0.7)',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.3)',
-    marginTop: 12,
+    marginVertical: 12,
   },
   dateText: {
     color: 'white',

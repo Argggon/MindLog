@@ -45,6 +45,10 @@
         "projectId": "b075b688-1d16-47ba-9532-972f04fb7ce8"
       }
     },
-    "owner": "argggon"
+    "owner": "argggon",
+    "statusBar": {
+      "style": "dark-content",
+      "backgroundColor": "#ffffff"
+    }
   }
 }

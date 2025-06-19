@@ -1,3 +1,4 @@
+import { BlurView } from 'expo-blur';
 import React, { ReactNode } from 'react';
 import { ImageBackground, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -8,25 +9,37 @@ interface PageLayoutProps {
   headerRight?: ReactNode;
 }
 
+
 const PageLayout: React.FC<PageLayoutProps> = ({ title, children, headerRight }) => {
   const insets = useSafeAreaInsets();
-  const backgroundImage = require('@/assets/images/蓝色海洋.jpeg');
+  const backgroundImage = require('@/assets/images/flowers.jpeg');
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
-      {/* 标题栏 */}
-      <View style={styles.header}>
-        <Text style={styles.title}>{title}</Text>
-        {headerRight && <View style={styles.headerRight}>{headerRight}</View>}
-      </View>
+    <View style={[
+      styles.container, 
+      // { paddingTop: insets.top }
+    ]}>
+      {/* <StatusBar barStyle="light-content" backgroundColor='black'/> */}
       <ImageBackground
         source={backgroundImage}
         style={styles.background}
-        resizeMode="cover"
+        // resizeMode="cover"
       >
+        {/* 标题栏添加模糊效果 */}
+        <BlurView 
+          intensity={50} 
+          tint="systemUltraThinMaterial"
+          // tint="regular"
+          style={styles.header}
+          experimentalBlurMethod="dimezisBlurView"
+        >
+          <Text style={styles.title}>{title}</Text>
+          {headerRight && <View style={styles.headerRight}>{headerRight}</View>}
+        </BlurView>
+        
         {/* 页面内容 */}
         <View style={styles.content}>
-            {children}
+          {children}
         </View>
       </ImageBackground>
     </View>
@@ -34,25 +47,25 @@ const PageLayout: React.FC<PageLayoutProps> = ({ title, children, headerRight })
 };
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-  },
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    // backgroundColor: 'transparent',
   },
   header: {
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
+    height: 80,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    // borderBottomWidth: 1,
+    // borderBottomColor: 'transparent',
     paddingHorizontal: 16,
+    paddingVertical:10,
+    backgroundColor: 'transparent',
+    // marginTop: 40, // 为状态栏留出空间
   },
   title: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#1E293B',
+    color: 'white',
   },
   headerRight: {
     position: 'absolute',
@@ -64,6 +77,9 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 20,
+  },
+  background: {
+    flex: 1,
   },
 });
 

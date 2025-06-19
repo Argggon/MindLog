@@ -1,7 +1,9 @@
 import { useTabBarHeight } from '@/utils/safeArea';
 import { Ionicons } from '@expo/vector-icons';
+import { BlurView } from 'expo-blur';
 import { Tabs } from 'expo-router';
 import React from 'react';
+import { StyleSheet } from 'react-native';
 
 export default function TabLayout() {
   const tabBarHeight = useTabBarHeight();
@@ -9,10 +11,15 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
+        // headerBackgroundColor: 'transparent',
         tabBarActiveTintColor: '#6366F1',
-        tabBarInactiveTintColor: 'gray',
+        tabBarInactiveTintColor: 'rgba(255, 255, 255, 0.7)',
         tabBarStyle: {
           backgroundColor: 'transparent',
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
           elevation: 0,
           shadowColor: 'transparent',
           borderTopWidth: 0,
@@ -20,6 +27,15 @@ export default function TabLayout() {
           paddingBottom: 10,
           paddingTop: 10,
         },
+        tabBarBackground: () => (
+          <BlurView
+            intensity={50}
+            tint="systemUltraThinMaterial"
+            // tint="regular"
+            style={StyleSheet.absoluteFill}
+            experimentalBlurMethod='dimezisBlurView'
+          />
+        ),
         tabBarActiveBackgroundColor: 'transparent',
         tabBarInactiveBackgroundColor: 'transparent',
         // tabBarPressColor: 'transparent',
