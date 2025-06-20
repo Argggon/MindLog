@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     // marginTop: 40, // 为状态栏留出空间
   },
   title: {
+    fontFamily: 'AbhayaLibre-SemiBold',
     fontSize: 20,
     fontWeight: '800',
     color: 'white',

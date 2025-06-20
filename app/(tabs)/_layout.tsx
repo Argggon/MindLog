@@ -15,7 +15,7 @@ export default function TabLayout() {
         tabBarInactiveTintColor: 'white',
         // TODO: 根据背景图片设置 activetint和 inactivetint
         tabBarStyle: {
-          backgroundColor: 'rgba(107, 107, 107, 0.3)',
+          backgroundColor: 'rgba(255, 255, 255, 0)',
           // TODO: 根据背景图片设置 backgroundColor
           position: 'absolute',
           bottom: 0,
