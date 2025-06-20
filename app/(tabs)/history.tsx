@@ -6,6 +6,7 @@ const CalendarScreen = () => {
     <View style={styles.container}>
       <Text style={styles.title}>日历视图</Text>
       <Text style={styles.description}>按周、月、年查看日志记录情况</Text>
+      <Text style={{fontFamily: 'AbhayaLibre-SemiBold', fontSize: 16,}}>This is a custom font example</Text>
     </View>
   );
 };

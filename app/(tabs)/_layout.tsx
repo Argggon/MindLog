@@ -11,11 +11,12 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        // headerBackgroundColor: 'transparent',
-        tabBarActiveTintColor: '#6366F1',
-        tabBarInactiveTintColor: 'rgba(255, 255, 255, 0.7)',
+        tabBarActiveTintColor: 'rgb(255, 161, 30)',
+        tabBarInactiveTintColor: 'white',
+        // TODO: 根据背景图片设置 activetint和 inactivetint
         tabBarStyle: {
-          backgroundColor: 'transparent',
+          backgroundColor: 'rgba(107, 107, 107, 0.3)',
+          // TODO: 根据背景图片设置 backgroundColor
           position: 'absolute',
           bottom: 0,
           left: 0,
@@ -24,8 +25,8 @@ export default function TabLayout() {
           shadowColor: 'transparent',
           borderTopWidth: 0,
           height: tabBarHeight,
-          paddingBottom: 10,
-          paddingTop: 10,
+          paddingBottom: 15,
+          paddingTop: 5,
         },
         tabBarBackground: () => (
           <BlurView
@@ -50,17 +51,17 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Log',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="journal-outline" size={size} color={color} />
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons name={focused ? "journal" : "journal-outline"} size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="calendar"
+        name="history"
         options={{
-          title: 'Calendar',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar-outline" size={size} color={color} />
+          title: 'History',
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons name={focused ? "time" : "time-outline"} size={size} color={color} />
           ),
         }}
       />
@@ -68,17 +69,17 @@ export default function TabLayout() {
         name="dictionary"
         options={{
           title: 'Dictionary',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="book-outline" size={size} color={color} />
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons name={focused ? "book" : "book-outline"} size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="settings"
         options={{
-          title: 'Profile',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
+          title: 'Settings',
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons name={focused? "settings" : "settings-outline"} size={size} color={color} />
           ),
         }}
       />
